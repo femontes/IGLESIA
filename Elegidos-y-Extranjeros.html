@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="slides-format" content="viewport">
+    <title>Elegidos y Extranjeros — 1 Pedro 1:1-2</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style type="text/tailwindcss">
+        @theme {
+            --color-bg: #0d1117;
+            --color-bg-deep: #060910;
+            --color-surface: #161b22;
+            --color-text: #f0e6d3;
+            --color-text-secondary: #c8b89a;
+            --color-text-muted: #8a7d6a;
+            --color-accent-1: #c8a96e;
+            --color-accent-2: #e8c89a;
+            --color-accent-3: #7a9bbf;
+            --color-glass-bg: rgba(255,255,255,0.05);
+            --color-glass-border: rgba(200,169,110,0.15);
+            --color-vignette: rgba(0,0,0,0.5);
+            --font-display: 'Montserrat', sans-serif;
+            --font-body: 'Montserrat', sans-serif;
+        }
+    </style>
+
+    <style>
+        :root {
+            --color-bg: #0d1117;
+            --color-text: #f0e6d3;
+            --glow-color-rgb: 200,169,110;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { background: var(--color-bg); margin: 0; }
+        body { font-family: 'Montserrat', sans-serif; color: var(--color-text); overflow: hidden; height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center; background: #000; }
+        .deck { position: relative; background: var(--color-bg); }
+        .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--color-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transform: scale(0.95); transition: opacity 0.7s ease, transform 0.7s ease; pointer-events: none; overflow: hidden; }
+        .slide.active { opacity: 1; transform: scale(1); pointer-events: all; }
+        .slide > .content { position: relative; z-index: 2; width: 100%; max-width: 1100px; padding: clamp(1rem, 3vw, 3.5rem); }
+        .nav-controls { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; z-index: 100; background: rgba(13,17,23,0.8); backdrop-filter: blur(12px); padding: 10px 24px; border-radius: 40px; border: 1px solid rgba(200,169,110,0.2); }
+        .nav-btn { width: 38px; height: 38px; border: none; background: rgba(200,169,110,0.1); color: #c8a96e; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .nav-btn:hover { background: rgba(200,169,110,0.25); }
+        .slide-dots { display: flex; gap: 8px; }
+        .slide-dots .dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(200,169,110,0.2); cursor: pointer; transition: background 0.3s, transform 0.3s; }
+        .slide-dots .dot.active { background: #c8a96e; transform: scale(1.3); }
+        .slide-counter { font-size: 0.75rem; color: var(--color-text-muted); min-width: 40px; text-align: center; font-family: 'Montserrat', sans-serif; }
+        .reveal { opacity: 0; transform: translateY(20px); }
+
+        @keyframes float-slow { 0% { transform: translate(0,0) scale(1); } 25% { transform: translate(60px,-50px) scale(1.12); } 50% { transform: translate(-40px,40px) scale(0.9); } 75% { transform: translate(50px,20px) scale(1.08); } 100% { transform: translate(0,0) scale(1); } }
+        @keyframes float-drift { 0% { transform: translate(0,0) scale(1) rotate(0deg); } 33% { transform: translate(-50px,-60px) scale(1.15) rotate(3deg); } 66% { transform: translate(40px,30px) scale(0.88) rotate(-2deg); } 100% { transform: translate(0,0) scale(1) rotate(0deg); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+        @keyframes glow-pulse { 0%,100% { text-shadow: 0 0 20px rgba(200,169,110,0.5), 0 0 40px rgba(200,169,110,0.2); } 50% { text-shadow: 0 0 35px rgba(200,169,110,0.8), 0 0 65px rgba(200,169,110,0.35); } }
+        @keyframes shimmer { 0% { opacity: 0.4; } 50% { opacity: 0.9; } 100% { opacity: 0.4; } }
+        .gradient-mesh { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(80px); animation: float-slow 12s ease-in-out infinite; }
+        .blob:nth-child(2) { animation: float-drift 16s ease-in-out infinite; }
+        .blob:nth-child(3) { animation: float-slow 20s ease-in-out infinite reverse; }
+        .blob:nth-child(4) { animation: float-drift 14s ease-in-out infinite reverse; }
+        .text-glow { text-shadow: 0 0 20px rgba(200,169,110,0.5), 0 0 40px rgba(200,169,110,0.2); }
+        .glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+        .slide::before { content:''; position:absolute; inset:0; z-index:1; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); background-repeat:repeat; background-size:256px 256px; opacity:0.03; mix-blend-mode:overlay; }
+        .slide::after { content:''; position:absolute; inset:0; z-index:1; pointer-events:none; background:radial-gradient(ellipse at center, transparent 50%, var(--color-vignette) 100%); }
+
+        /* Gold divider line */
+        .gold-line { width: 60px; height: 2px; background: linear-gradient(90deg, transparent, #c8a96e, transparent); margin: 1rem 0; }
+        .gold-line-full { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, #c8a96e 30%, #c8a96e 70%, transparent); opacity: 0.3; margin: 1.2rem 0; }
+
+        /* Scripture block */
+        .scripture-block { border-left: 3px solid #c8a96e; background: rgba(200,169,110,0.06); border-radius: 0 12px 12px 0; padding: 1.2rem 1.5rem; font-style: italic; }
+
+        /* Badge pill */
+        .badge { display: inline-block; background: linear-gradient(135deg, rgba(200,169,110,0.2), rgba(200,169,110,0.08)); border: 1px solid rgba(200,169,110,0.3); border-radius: 30px; padding: 0.3rem 1rem; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #c8a96e; }
+
+        /* Glass card */
+        .glass-card { background: rgba(255,255,255,0.04); backdrop-filter: blur(12px); border: 1px solid rgba(200,169,110,0.12); border-radius: 16px; padding: 1.5rem 1.8rem; transition: transform 0.3s, box-shadow 0.3s; }
+        .glass-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(200,169,110,0.12); }
+
+        /* Trinity card accent */
+        .trinity-a { border-top: 3px solid #c8a96e; }
+        .trinity-b { border-top: 3px solid #7a9bbf; }
+        .trinity-c { border-top: 3px solid #a3c4a0; }
+
+        /* Deco cross */
+        .deco-cross { position: absolute; opacity: 0.04; font-size: 28rem; pointer-events: none; z-index: 0; line-height: 1; user-select: none; }
+
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; } }
+    </style>
+</head>
+<body>
+
+<div class="mouse-spotlight" style="position:fixed;inset:0;z-index:99;pointer-events:none;"></div>
+
+<div class="deck">
+
+    <!-- SLIDE 1: PORTADA -->
+    <div class="slide slide-1 active" data-slide="1">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:500px;height:500px;top:-120px;right:-100px;background:#c8a96e;opacity:0.12;"></div>
+            <div class="blob" style="width:350px;height:350px;bottom:-80px;left:-60px;background:#7a9bbf;opacity:0.1;"></div>
+            <div class="blob" style="width:250px;height:250px;top:40%;left:10%;background:#c8a96e;opacity:0.07;"></div>
+        </div>
+        <canvas class="particle-canvas" style="position:absolute;inset:0;z-index:1;"></canvas>
+        <div style="position:absolute;inset:0;z-index:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+            <span class="deco-cross" style="position:relative;opacity:0.045;font-size:26rem;">✝</span>
+        </div>
+        <div class="content text-center">
+            <div class="reveal" style="margin-bottom:1.2rem;">
+                <span class="badge">Exposición Bíblica</span>
+            </div>
+            <div class="reveal" style="font-size:clamp(3rem,8vw,6.5rem);margin-bottom:0.4rem;animation:float 4s ease-in-out infinite;display:block;">✝</div>
+            <h1 class="reveal" style="font-family:'Montserrat',sans-serif;font-size:clamp(2.4rem,5.5vw,4.5rem);font-weight:900;background:linear-gradient(135deg,#c8a96e,#f0e6d3,#c8a96e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.02em;line-height:1.1;margin-bottom:0.6rem;">Elegidos<br>y Extranjeros</h1>
+            <div class="gold-line reveal" style="margin:0.8rem auto;"></div>
+            <p class="reveal" style="font-family:'Montserrat',sans-serif;font-size:clamp(0.85rem,1.4vw,1.1rem);font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#8a7d6a;margin-bottom:0.5rem;">1 Pedro 1:1–2</p>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: TEXTO BÍBLICO COMPLETO -->
+    <div class="slide slide-2" data-slide="2">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:400px;height:400px;top:-100px;right:-80px;background:#c8a96e;opacity:0.09;"></div>
+            <div class="blob" style="width:280px;height:280px;bottom:-60px;left:-40px;background:#7a9bbf;opacity:0.07;"></div>
+        </div>
+        <div class="content" style="max-width:820px;">
+            <div class="reveal" style="margin-bottom:1rem;">
+                <span class="badge">El Texto</span>
+            </div>
+            <h2 class="reveal" style="font-family:'Montserrat',sans-serif;font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;color:#c8a96e;margin-bottom:1.2rem;">1 Pedro 1:1–2</h2>
+            <div class="scripture-block reveal">
+                <p style="font-family:'Montserrat',sans-serif;font-size:clamp(1rem,1.8vw,1.25rem);font-weight:400;font-style:italic;color:#f0e6d3;line-height:1.8;margin:0;">
+                    <strong style="font-weight:700;font-style:normal;color:#c8a96e;">¹ Pedro</strong>, apóstol de Jesucristo, a los
+                    <strong style="font-weight:800;font-style:normal;color:#e8c89a;">elegidos, extranjeros dispersos</strong>
+                    por el Ponto, Galacia, Capadocia, Asia y Bitinia,
+                    <strong style="font-weight:700;font-style:normal;color:#c8a96e;">² según el conocimiento previo de Dios el Padre</strong>,
+                    mediante la <strong style="font-weight:700;font-style:normal;color:#7a9bbf;">obra santificadora del Espíritu</strong>,
+                    para <strong style="font-weight:700;font-style:normal;color:#a3c4a0;">obedecer a Jesucristo y ser rociados con su sangre</strong>:
+                    Que abunden en ustedes la gracia y la paz.
+                </p>
+            </div>
+            <div class="gold-line-full reveal"></div>
+            <p class="reveal" style="font-family:'Montserrat',sans-serif;font-size:0.8rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#8a7d6a;margin:0;">Nueva Versión Internacional (NVI)</p>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: DOS TÉRMINOS QUE DEFINEN LA VIDA CRISTIANA -->
+    <div class="slide slide-3" data-slide="3">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:380px;height:380px;top:-80px;left:-80px;background:#c8a96e;opacity:0.1;"></div>
+            <div class="blob" style="width:300px;height:300px;bottom:-60px;right:-40px;background:#7a9bbf;opacity:0.07;"></div>
+        </div>
+        <div class="content">
+            <div class="reveal" style="margin-bottom:0.8rem;">
+                <span class="badge">1 Pedro 1:1</span>
+            </div>
+            <h2 class="reveal" style="font-family:'Montserrat',sans-serif;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;color:#f0e6d3;margin-bottom:0.4rem;">Define la vida cristiana<br>en <span style="color:#c8a96e;">dos términos</span></h2>
+            <div class="gold-line-full reveal"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1.2rem;">
+                <div class="glass-card reveal" style="border-top:3px solid #c8a96e;text-align:center;">
+                    <div style="font-size:2.8rem;margin-bottom:0.6rem;">👑</div>
+                    <h3 style="font-family:'Montserrat',sans-serif;font-size:clamp(1.4rem,2.8vw,2rem);font-weight:900;color:#c8a96e;margin:0 0 0.6rem;letter-spacing:-0.01em;">Elegidos</h3>
+                    <div class="gold-line" style="margin:0.5rem auto;width:40px;"></div>
+                    <p style="font-family:'Montserrat',sans-serif;font-size:clamp(0.85rem,1.4vw,1rem);font-weight:400;color:#c8b89a;line-height:1.6;margin:0;">Su relación con Dios <strong style="color:#f0e6d3;font-weight:700;">no es un accidente</strong>, sino parte de un <strong style="color:#f0e6d3;font-weight:700;">plan soberano</strong></p>
+                </div>
+                <div class="glass-card reveal" style="border-top:3px solid #7a9bbf;text-align:center;">
+                    <div style="font-size:2.8rem;margin-bottom:0.6rem;">🌍</div>
+                    <h3 style="font-family:'Montserrat',sans-serif;font-size:clamp(1.4rem,2.8vw,2rem);font-weight:900;color:#7a9bbf;margin:0 0 0.6rem;letter-spacing:-0.01em;">Extranjeros<br>Dispersos</h3>
+                    <div style="width:40px;height:2px;background:linear-gradient(90deg,transparent,#7a9bbf,transparent);margin:0.5rem auto;"></div>
+                    <p style="font-family:'Montserrat',sans-serif;font-size:clamp(0.85rem,1.4vw,1rem);font-weight:400;color:#c8b89a;line-height:1.6;margin:0;">Aunque elegidos, viven en este mundo como <strong style="color:#f0e6d3;font-weight:700;">exiliados</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: LA OBRA DE DIOS EN TRES PERSONAS -->
+    <div class="slide slide-4" data-slide="4">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:400px;height:400px;top:-100px;right:-60px;background:#c8a96e;opacity:0.08;"></div>
+            <div class="blob" style="width:260px;height:260px;bottom:-50px;left:-40px;background:#a3c4a0;opacity:0.08;"></div>
+        </div>
+        <div class="content">
+            <div class="reveal" style="margin-bottom:0.8rem;">
+                <span class="badge">1 Pedro 1:2</span>
+            </div>
+            <h2 class="reveal" style="font-family:'Montserrat',sans-serif;font-size:clamp(1.4rem,2.8vw,2.1rem);font-weight:800;color:#f0e6d3;margin-bottom:0.3rem;">La obra de Dios en <span style="color:#c8a96e;">tres personas</span></h2>
+            <div class="scripture-block reveal" style="margin-bottom:1.2rem;padding:0.8rem 1.2rem;">
+                <p style="font-family:'Montserrat',sans-serif;font-size:clamp(0.8rem,1.3vw,0.95rem);font-style:italic;color:#c8b89a;margin:0;line-height:1.6;">«según el conocimiento previo de <strong style="color:#c8a96e;font-weight:700;">Dios el Padre</strong>, mediante <strong style="color:#7a9bbf;font-weight:700;">la obra santificadora del Espíritu</strong>, para <strong style="color:#a3c4a0;font-weight:700;">obedecer a Jesucristo y ser rociados con su sangre</strong>»</p>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;">
+                <div class="glass-card reveal trinity-a" style="text-align:center;">
+                    <div style="font-size:2rem;margin-bottom:0.5rem;">👁️</div>
+                    <h4 style="font-family:'Montserrat',sans-serif;font-size:clamp(0.85rem,1.5vw,1rem);font-weight:800;color:#c8a96e;margin:0 0 0.4rem;letter-spacing:0.02em;text-transform:uppercase;">a. Dios Padre</h4>
+                    <p style="font-family:'Montserrat',sans-serif;font-size:clamp(0.75rem,1.2vw,0.88rem);color:#c8b89a;line-height:1.5;margin:0;">Su <strong style="color:#f0e6d3;font-weight:700;">conocimiento previo</strong></p>
+                </div>
+                <div class="glass-card reveal trinity-b" style="text-align:center;">
+                    <div style="font-size:2rem;margin-bottom:0.5rem;">🕊️</div>
+                    <h4 style="font-family:'Montserrat',sans-serif;font-size:clamp(0.85rem,1.5vw,1rem);font-weight:800;color:#7a9bbf;margin:0 0 0.4rem;letter-spacing:0.02em;text-transform:uppercase;">b. El Espíritu</h4>
+                    <p style="font-family:'Montserrat',sans-serif;font-size:clamp(0.75rem,1.2vw,0.88rem);color:#c8b89a;line-height:1.5;margin:0;">Su <strong style="color:#f0e6d3;font-weight:700;">obra santificadora</strong></p>
+                </div>
+                <div class="glass-card reveal trinity-c" style="text-align:center;">
+                    <div style="font-size:2rem;margin-bottom:0.5rem;">✝️</div>
+                    <h4 style="font-family:'Montserrat',sans-serif;font-size:clamp(0.85rem,1.5vw,1rem);font-weight:800;color:#a3c4a0;margin:0 0 0.4rem;letter-spacing:0.02em;text-transform:uppercase;">c. Jesucristo</h4>
+                    <p style="font-family:'Montserrat',sans-serif;font-size:clamp(0.75rem,1.2vw,0.88rem);color:#c8b89a;line-height:1.5;margin:0;"><strong style="color:#f0e6d3;font-weight:700;">Obediencia</strong> y rociados con su sangre</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: DIOS PADRE — ROMANOS 8:29 -->
+    <div class="slide slide-5" data-slide="5">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:450px;height:450px;top:-120px;right:-80px;background:#c8a96e;opacity:0.11;"></div>
+            <div class="blob" style="width:300px;height:300px;bottom:-70px;left:-50px;background:#c8a96e;opacity:0.06;"></div>
+        </div>
+        <canvas class="particle-canvas-ambient" style="position:absolute;inset:0;z-index:1;"></canvas>
+        <div class="content" style="max-width:820px;">
+            <div class="reveal" style="margin-bottom:0.8rem;">
+                <span class="badge" style="border-color:rgba(200,169,110,0.4);color:#c8a96e;">a. Dios Padre y su conocimiento previo</span>
+            </div>
+            <h2 class="reveal" style="font-family:'Montserrat',sans-serif;font-size:clamp(1.4rem,2.8vw,2.1rem);font-weight:800;color:#c8a96e;margin-bottom:1rem;">Romanos 8:29 <span style="color:#8a7d6a;font-size:0.7em;font-weight:500;">NVI</span></h2>
+            <div class="scripture-block reveal" style="border-left-color:#c8a96e;">
+                <p style="font-family:'Montserrat',sans-serif;font-size:clamp(1rem,1.9vw,1.3rem);font-style:italic;color:#f0e6d3;line-height:1.8;margin:0;">
+                    «Porque a los que <strong style="font-style:normal;font-weight:800;color:#c8a96e;">Dios conoció de antemano</strong>, también los predestinó a ser transformados según la imagen de su Hijo, para que él sea el primogénito entre muchos hermanos»
+                </p>
+            </div>
+            <div class="glass-card reveal" style="margin-top:1.2rem;border-left:3px solid #c8a96e;border-radius:0 12px 12px 0;border-top:none;">
+                <p style="font-family:'Montserrat',sans-serif;font-size:clamp(0.85rem,1.4vw,1rem);color:#c8b89a;margin:0;line-height:1.6;">El <strong style="color:#f0e6d3;font-weight:700;">conocimiento previo de Dios</strong> no es un simple dato histórico — es el fundamento de nuestra identidad como elegidos.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: ESPÍRITU SANTO — 2 TES 2:13 -->
+    <div class="slide slide-6" data-slide="6">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:400px;height:400px;top:-100px;left:-80px;background:#7a9bbf;opacity:0.12;"></div>
+            <div class="blob" style="width:280px;height:280px;bottom:-50px;right:-40px;background:#7a9bbf;opacity:0.07;"></div>
+        </div>
+        <div class="content" style="max-width:820px;">
+            <div class="reveal" style="margin-bottom:0.8rem;">
+                <span class="badge" style="border-color:rgba(122,155,191,0.4);color:#7a9bbf;">b. El Espíritu Santo y su obra santificadora</span>
+            </div>
+            <h2 class="reveal" style="font-family:'Montserrat',sans-serif;font-size:clamp(1.4rem,2.8vw,2.1rem);font-weight:800;color:#7a9bbf;margin-bottom:1rem;">2 Tesalonicenses 2:13 <span style="color:#8a7d6a;font-size:0.7em;font-weight:500;">NVI</span></h2>
+            <div class="scripture-block reveal" style="border-left-color:#7a9bbf;background:rgba(122,155,191,0.06);">
+                <p style="font-family:'Montserrat',sans-serif;font-size:clamp(1rem,1.9vw,1.3rem);font-style:italic;color:#f0e6d3;line-height:1.8;margin:0;">
+                    «Nosotros, en cambio, siempre debemos dar gracias a Dios por ustedes, hermanos amados por el Señor, porque <strong style="font-style:normal;font-weight:800;color:#7a9bbf;">Dios los escogió como los primeros frutos para ser salvos, mediante la obra santificadora del Espíritu</strong> y la fe que tienen en la verdad»
+                </p>
+            </div>
+            <div class="glass-card reveal" style="margin-top:1.2rem;border-left:3px solid #7a9bbf;border-radius:0 12px 12px 0;border-top:none;">
+                <p style="font-family:'Montserrat',sans-serif;font-size:clamp(0.85rem,1.4vw,1rem);color:#c8b89a;margin:0;line-height:1.6;">La <strong style="color:#f0e6d3;font-weight:700;">santificación</strong> no es un esfuerzo humano — es la obra activa del Espíritu Santo en cada creyente.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: OBEDIENCIA A JESUCRISTO -->
+    <div class="slide slide-7" data-slide="7">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:420px;height:420px;top:-100px;right:-70px;background:#a3c4a0;opacity:0.1;"></div>
+            <div class="blob" style="width:280px;height:280px;bottom:-60px;left:-40px;background:#a3c4a0;opacity:0.07;"></div>
+        </div>
+        <div class="content" style="max-width:820px;">
+            <div class="reveal" style="margin-bottom:0.8rem;">
+                <span class="badge" style="border-color:rgba(163,196,160,0.4);color:#a3c4a0;">c. Obediencia a Jesucristo</span>
+            </div>
+            <h2 class="reveal" style="font-family:'Montserrat',sans-serif;font-size:clamp(1.5rem,3vw,2.3rem);font-weight:800;color:#a3c4a0;margin-bottom:1rem;">Vivir en obediencia a Cristo</h2>
+            <div class="scripture-block reveal" style="border-left-color:#a3c4a0;background:rgba(163,196,160,0.06);margin-bottom:1.2rem;">
+                <p style="font-family:'Montserrat',sans-serif;font-size:clamp(0.95rem,1.7vw,1.2rem);font-style:italic;color:#c8b89a;line-height:1.7;margin:0;">«…para <strong style="font-style:normal;font-weight:800;color:#a3c4a0;">obedecer a Jesucristo y ser rociados con su sangre</strong>»</p>
+            </div>
+            <div class="glass-card reveal" style="border-top:3px solid #a3c4a0;">
+                <p style="font-family:'Montserrat',sans-serif;font-size:clamp(0.9rem,1.6vw,1.1rem);color:#f0e6d3;font-weight:500;line-height:1.7;margin:0;">
+                    No se trata de solo <strong style="color:#a3c4a0;font-weight:700;">ir al cielo</strong>. La obediencia a Cristo también tiene que ver con <strong style="color:#a3c4a0;font-weight:700;">él aquí en la tierra</strong> — en el <em>ahora</em>.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: ¿QUÉ NOS DICE HOY? -->
+    <div class="slide slide-8" data-slide="8">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:500px;height:500px;top:-100px;right:-100px;background:#c8a96e;opacity:0.13;"></div>
+            <div class="blob" style="width:350px;height:350px;bottom:-80px;left:-60px;background:#7a9bbf;opacity:0.09;"></div>
+            <div class="blob" style="width:200px;height:200px;top:40%;left:15%;background:#a3c4a0;opacity:0.07;"></div>
+        </div>
+        <canvas class="particle-canvas" style="position:absolute;inset:0;z-index:1;"></canvas>
+        <div class="content">
+            <div class="reveal" style="margin-bottom:1rem;text-align:center;">
+                <span class="badge">Aplicación</span>
+            </div>
+            <h2 class="reveal" style="font-family:'Montserrat',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;text-align:center;color:#f0e6d3;margin-bottom:0.3rem;">¿Qué nos dice <span style="color:#c8a96e;">hoy</span>?</h2>
+            <div class="gold-line reveal" style="margin:0.8rem auto 1.5rem;"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+                <div class="glass-card reveal" style="border-top:3px solid #c8a96e;text-align:center;padding:2rem 1.5rem;">
+                    <div style="font-size:3rem;margin-bottom:0.8rem;" class="glow-pulse">✨</div>
+                    <div style="font-family:'Montserrat',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;color:#c8a96e;line-height:1.1;margin-bottom:0.6rem;">1</div>
+                    <p style="font-family:'Montserrat',sans-serif;font-size:clamp(0.9rem,1.6vw,1.1rem);font-weight:700;color:#f0e6d3;line-height:1.5;margin:0;">¡Somos Elegidos y no somos un accidente!</p>
+                </div>
+                <div class="glass-card reveal" style="border-top:3px solid #7a9bbf;text-align:center;padding:2rem 1.5rem;">
+                    <div style="font-size:3rem;margin-bottom:0.8rem;">🌐</div>
+                    <div style="font-family:'Montserrat',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;color:#7a9bbf;line-height:1.1;margin-bottom:0.6rem;">2</div>
+                    <p style="font-family:'Montserrat',sans-serif;font-size:clamp(0.9rem,1.6vw,1.1rem);font-weight:700;color:#f0e6d3;line-height:1.5;margin:0;">No pertenecemos al sistema de valores de la sociedad que nos rodea</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: CIERRE — GRACIA Y PAZ -->
+    <div class="slide slide-9" data-slide="9">
+        <div class="gradient-mesh">
+            <div class="blob" style="width:550px;height:550px;top:-150px;right:-100px;background:#c8a96e;opacity:0.14;"></div>
+            <div class="blob" style="width:380px;height:380px;bottom:-100px;left:-70px;background:#7a9bbf;opacity:0.1;"></div>
+            <div class="blob" style="width:250px;height:250px;top:35%;left:20%;background:#a3c4a0;opacity:0.08;"></div>
+        </div>
+        <canvas class="particle-canvas" style="position:absolute;inset:0;z-index:1;"></canvas>
+        <div style="position:absolute;inset:0;z-index:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+            <span style="font-size:28rem;opacity:0.035;user-select:none;line-height:1;">✝</span>
+        </div>
+        <div class="content text-center">
+            <p class="reveal" style="font-family:'Montserrat',sans-serif;font-size:clamp(0.75rem,1.2vw,0.9rem);font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:#8a7d6a;margin-bottom:1rem;">1 Pedro 1:2</p>
+            <h2 class="reveal" style="font-family:'Montserrat',sans-serif;font-size:clamp(2rem,5vw,4rem);font-weight:900;background:linear-gradient(135deg,#c8a96e,#f0e6d3,#7a9bbf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;margin-bottom:1rem;">Que abunden en ustedes<br>la gracia y la paz</h2>
+            <div class="gold-line reveal" style="margin:1rem auto 1.2rem;"></div>
+            <div class="scripture-block reveal" style="display:inline-block;text-align:left;max-width:580px;">
+                <p style="font-family:'Montserrat',sans-serif;font-size:clamp(0.85rem,1.4vw,1rem);font-style:italic;color:#c8b89a;line-height:1.7;margin:0;">«Elegidos… extranjeros dispersos… según el conocimiento previo de Dios el Padre, mediante la obra santificadora del Espíritu, para obedecer a Jesucristo y ser rociados con su sangre»</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="nav-controls">
+    <button class="nav-btn" onclick="changeSlide(-1)">&#8249;</button>
+    <div class="slide-dots" id="dots"></div>
+    <button class="nav-btn" onclick="changeSlide(1)">&#8250;</button>
+    <span class="slide-counter" id="counter">1 / 9</span>
+</div>
+
+<script>
+    let current = 1;
+    const total = document.querySelectorAll('.slide').length;
+    const dotsContainer = document.getElementById('dots');
+    const counter = document.getElementById('counter');
+    for (let i = 1; i <= total; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i === 1 ? ' active' : '');
+        dot.onclick = () => goToSlide(i);
+        dotsContainer.appendChild(dot);
+    }
+    function goToSlide(n) {
+        const prev = document.querySelector('.slide.active');
+        const next = document.querySelector(`.slide[data-slide="${n}"]`);
+        if (prev) prev.classList.remove('active');
+        if (next) { next.classList.add('active'); animateSlide(next); }
+        current = n; updateNav();
+    }
+    function changeSlide(dir) { let n = current + dir; if (n < 1) n = total; if (n > total) n = 1; goToSlide(n); }
+    function updateNav() {
+        document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i+1 === current));
+        counter.textContent = current + ' / ' + total;
+    }
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+    });
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', e => { const d = touchStartX - e.changedTouches[0].clientX; if (Math.abs(d) > 50) changeSlide(d > 0 ? 1 : -1); });
+
+    function animateSlide(slide) {
+        slide.querySelectorAll('.reveal').forEach((el, i) => {
+            el.style.transition = 'none';
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.offsetHeight;
+            const delay = i * 0.09;
+            el.style.transition = `opacity 0.4s ease ${delay}s, transform 0.4s ease ${delay}s`;
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+        });
+    }
+
+    document.addEventListener('mousemove', e => {
+        const s = document.querySelector('.mouse-spotlight');
+        if (s) s.style.background = `radial-gradient(600px circle at ${e.clientX}px ${e.clientY}px, rgba(200,169,110,0.05), transparent 40%)`;
+    });
+
+    window.initParticles = function(canvas, opts) {
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+        const interactive = opts.interactive !== false;
+        const count = opts.count || (interactive ? 50 : 18);
+        let mx = -1000, my = -1000;
+        const particles = Array.from({length: count}, () => ({
+            x: Math.random()*canvas.width, y: Math.random()*canvas.height,
+            vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3,
+            size: Math.random()*2+0.8, alpha: Math.random()*0.3+0.1
+        }));
+        if (interactive) {
+            canvas.addEventListener('mousemove', e => { const r = canvas.getBoundingClientRect(); mx = e.clientX-r.left; my = e.clientY-r.top; });
+            canvas.addEventListener('mouseleave', () => { mx=-1000; my=-1000; });
+        }
+        (function animate() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            particles.forEach(p => {
+                if (interactive) { const dx=p.x-mx, dy=p.y-my, d=Math.sqrt(dx*dx+dy*dy); if (d<120) { const f=(120-d)/120*2; p.vx+=(dx/d)*f*0.1; p.vy+=(dy/d)*f*0.1; } }
+                p.vx*=0.98; p.vy*=0.98; p.x+=p.vx; p.y+=p.vy;
+                if(p.x<0)p.x=canvas.width; if(p.x>canvas.width)p.x=0;
+                if(p.y<0)p.y=canvas.height; if(p.y>canvas.height)p.y=0;
+                ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+                ctx.fillStyle=`rgba(200,169,110,${p.alpha})`; ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        })();
+    };
+    document.querySelectorAll('.particle-canvas').forEach(c => initParticles(c, {interactive:true,count:50}));
+    document.querySelectorAll('.particle-canvas-ambient').forEach(c => initParticles(c, {interactive:false,count:18}));
+
+    try { animateSlide(document.querySelector('.slide.active')); } catch(e) {}
+</script>
+
+<script>
+    function resize169() {
+        const deck = document.querySelector('.deck');
+        const vw = window.innerWidth, vh = window.innerHeight;
+        let w, h;
+        if (vw / vh > 16 / 9) {
+            h = vh; w = h * 16 / 9;
+        } else {
+            w = vw; h = w * 9 / 16;
+        }
+        deck.style.width = w + 'px';
+        deck.style.height = h + 'px';
+    }
+    resize169();
+    window.addEventListener('resize', resize169);
+</script>
+</body>
+</html>
